@@ -20,17 +20,17 @@ jobs:
         name=$(echo $response | jq -r '.data.Name')
         points=$(echo $response | jq -r '.data.Points')
         icon_url=$(echo $response | jq -r '.data.IconUrl')
-        echo "::set-output name=name::$name"
-        echo "::set-output name=points::$points"
-        echo "::set-output name=icon_url::$icon_url"
+        echo "name=$name" >> $GITHUB_ENV
+        echo "points=$points" >> $GITHUB_ENV
+        echo "icon_url=$icon_url" >> $GITHUB_ENV
 
     - name: 发送用戶信息
       run: |
         curl -s -X POST \
-        -H 'Content-Type: application/json
-          -d '{
+        -H 'Content-Type: application/json' \
+        -d '{
           "title": "雨云签到",
-          "desp": "尊敬的'"${{ steps.get-info.outputs.name }}"'大人，即将为您签到！当前剩余积分'"${{ steps.get-info.outputs.points }}"'！"
+          "desp": "尊敬的'"${{ env.name }}"'大人，即将为您签到！当前剩余积分'"${{ env.points }}"'！"
           }' \
           "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_TOKEN }}.send"
 
@@ -42,14 +42,14 @@ jobs:
           -H "x-api-key: ${{ secrets.RAINYUN_API_KEY }}" \
           -d '{"task_name": "每日签到"}' \
           https://api.v2.rainyun.com/user/reward/tasks)
-        echo "::set-output name=response::$response"
+        echo "response=$response" >> $GITHUB_ENV
 
     - name: 发送签到结果
       run: |
         curl -s -X POST \
-        -H 'Content-Type: application/json
-          -d '{
+        -H 'Content-Type: application/json' \
+        -d '{
           "title": "雨云签到",
-            "desp": "每日签到已完成！\n签到结果: '"${{ steps.checkin.outputs.response }}"'"
+          "desp": "每日签到已完成！\n签到结果: '"${{ env.response }}"'"
           }' \
           "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_TOKEN }}.send"
