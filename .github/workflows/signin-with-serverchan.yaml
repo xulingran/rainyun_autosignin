@@ -27,8 +27,9 @@ jobs:
     - name: 发送用戶信息
       run: |
         curl -s -X POST \
+        -H 'Content-Type: application/json
           -d '{
-          "title": "雨云签到"
+          "title": "雨云签到",
           "desp": "尊敬的'"${{ steps.get-info.outputs.name }}"'大人，即将为您签到！当前剩余积分'"${{ steps.get-info.outputs.points }}"'！"
           }' \
           "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_TOKEN }}.send"
@@ -46,8 +47,9 @@ jobs:
     - name: 发送签到结果
       run: |
         curl -s -X POST \
+        -H 'Content-Type: application/json
           -d '{
-          "title":"雨云签到"
+          "title": "雨云签到",
             "desp": "每日签到已完成！\n签到结果: '"${{ steps.checkin.outputs.response }}"'"
           }' \
           "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_TOKEN }}.send"
