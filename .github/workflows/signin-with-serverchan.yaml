@@ -1,4 +1,4 @@
-name: 每日签到（tg通知）
+name: 每日签到（server酱通知）
 
 on:
   schedule:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 獲取信息
+    - name: 获取信息
       id: get-info
       run: |
         response=$(curl -s -X GET \
