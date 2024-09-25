@@ -48,6 +48,6 @@ jobs:
         curl -s -X POST \
           -H "Content-Type: application/json" \
           -d '{
-            "text": "每日签到已完成！\n签到结果: '"${{ steps.checkin.outputs.response }}"'"
+            "desp": "每日签到已完成！\n签到结果: '"${{ steps.checkin.outputs.response }}"'"
           }' \
           "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_TOKEN }}.send"
