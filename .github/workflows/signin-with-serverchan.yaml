@@ -24,10 +24,10 @@ jobs:
         echo "points=$points" >> $GITHUB_ENV
         echo "icon_url=$icon_url" >> $GITHUB_ENV
 
-    - name: 发送用戶信息
+    - name: 发送用户信息
       run: |
         curl -s -X POST \
-        -H 'Content-Type: application/json' \
+        -H "Content-Type: application/json" \
         -d '{
           "title": "雨云签到",
           "desp": "尊敬的'"${{ env.name }}"'大人，即将为您签到！当前剩余积分'"${{ env.points }}"'！"
@@ -47,7 +47,7 @@ jobs:
     - name: 发送签到结果
       run: |
         curl -s -X POST \
-        -H 'Content-Type: application/json' \
+        -H "Content-Type: application/json" \
         -d '{
           "title": "雨云签到",
           "desp": "每日签到已完成！\n签到结果: '"${{ env.response }}"'"
