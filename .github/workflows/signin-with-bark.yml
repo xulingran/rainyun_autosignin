@@ -10,6 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: 发送签到请求
+      id: checkin
+      run: |
+        response=$(curl -s -X POST \
+          -H "Content-Type: application/json" \
+          -H "x-api-key: ${{ secrets.RAINYUN_API_KEY }}" \
+          -d '{"task_name": "每日签到"}' \
+          https://api.v2.rainyun.com/user/reward/tasks)
+        echo "response=$response" >> $GITHUB_ENV
+
     - name: 获取信息
       id: get-info
       run: |
@@ -24,34 +34,13 @@ jobs:
         echo "points=$points" >> $GITHUB_ENV
         echo "icon_url=$icon_url" >> $GITHUB_ENV
 
-    - name: 发送用户信息
+    - name: 发送通知
       run: |
         curl -s -X POST \
         -H "Content-Type: application/json" \
         -d '{
           "title": "雨云签到",
-          "body": "尊敬的'"${{ env.name }}"'大人，即将为您签到！当前剩余积分'"${{ env.points }}"'！",
-          "group": "雨云签到"
-          }' \
-          "https://api.day.app/${{ secrets.BarkToken }}/"
-
-    - name: 发送签到请求
-      id: checkin
-      run: |
-        response=$(curl -s -X POST \
-          -H "Content-Type: application/json" \
-          -H "x-api-key: ${{ secrets.RAINYUN_API_KEY }}" \
-          -d '{"task_name": "每日签到"}' \
-          https://api.v2.rainyun.com/user/reward/tasks)
-        echo "response=$response" >> $GITHUB_ENV
-
-    - name: 发送签到结果
-      run: |
-        curl -s -X POST \
-        -H "Content-Type: application/json" \
-        -d '{
-          "title": "雨云签到",
-          "body": "每日签到已完成！\n签到结果: '"${{ env.response }}"'",
+          "body": "尊敬的'"${{ env.name }}"'大人，\n每日签到已完成！\n签到结果: '"${{ env.response }}"'，当前剩余积分'"${{ env.points }}"'！",
           "group": "雨云签到"
           }' \
           "https://api.day.app/${{ secrets.BarkToken }}/"
